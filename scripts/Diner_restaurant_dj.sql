@@ -11,8 +11,11 @@ SET NOCOUNT ON
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 
-IF DB_ID (N'Diner_restaurant_FAO') IS NOT NULL
-DROP DATABASE Diner_restaurant_FAO;
+IF DB_ID (N'Diner_restaurant_DJ') IS NOT NULL
+BEGIN
+	alter database Diner_restaurant_DJ set single_user with rollback immediate;
+	DROP DATABASE Diner_restaurant_DJ;
+END
 GO
 
 -------------------------------------------------------------------------------------------------------
@@ -23,7 +26,7 @@ GO
 
 --CREATE DATABASE .....
 
-CREATE DATABASE Diner_restaurant_FAO;
+CREATE DATABASE Diner_restaurant_DJ;
 GO
 
 -------------------------------------------------------------------------------------------------------
@@ -32,7 +35,7 @@ GO
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 
-USE Diner_restaurant_FAO
+USE Diner_restaurant_DJ
 GO
 
 CREATE TABLE [Invoice] (
@@ -139,8 +142,13 @@ insert into [Table] (capacity) values (4);
 insert into [Table] (capacity) values (2);
 insert into [Table] (capacity) values (6);
 
-
-
 insert into TaxRate values (7.7, 'Taxe suisse standard');
 insert into TaxRate values (2.5, 'Taxe réduit');
 insert into TaxRate values (3.7, 'Taxe spécial hébergement');
+
+
+INSERT INTO Invoice (invoiceNumber) VALUES (1);
+INSERT INTO Invoice (invoiceNumber) VALUES (2);
+INSERT INTO Invoice (invoiceNumber) VALUES (3);
+INSERT INTO Invoice (invoiceNumber) VALUES (4);
+INSERT INTO Invoice (invoiceNumber) VALUES (5);
