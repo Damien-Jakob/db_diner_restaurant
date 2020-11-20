@@ -1,14 +1,6 @@
--- Diner_restaurant_FAO.sql:	This script creates a database for the management of booking and invoice of a restaurant
---				The database is initialized with fake data and data coming from the restaurant "Hotel de Ville" in Echallens
---				
--- Version:		1.0, novembre 2018
--- Author:		F. Andolfatto
---
--- History:
---			1.0 Database creation
---
---
-
+/* This script creates a database for the management of booking and invoice of a restaurant
+	The database is initialized with fake data and data coming from the restaurant "Hotel de Ville" in Echallens
+*/
 USE master
 GO
 SET NOCOUNT ON
@@ -19,7 +11,9 @@ SET NOCOUNT ON
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 
-
+IF DB_ID (N'Diner_restaurant_FAO') IS NOT NULL
+DROP DATABASE Diner_restaurant_FAO;
+GO
 
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
@@ -29,14 +23,14 @@ SET NOCOUNT ON
 
 --CREATE DATABASE .....
 
-
+CREATE DATABASE Diner_restaurant_FAO;
+GO
 
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 -- Création des tables
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
-
 
 USE Diner_restaurant_FAO
 GO
@@ -150,4 +144,3 @@ insert into [Table] (capacity) values (6);
 insert into TaxRate values (7.7, 'Taxe suisse standard');
 insert into TaxRate values (2.5, 'Taxe réduit');
 insert into TaxRate values (3.7, 'Taxe spécial hébergement');
-
