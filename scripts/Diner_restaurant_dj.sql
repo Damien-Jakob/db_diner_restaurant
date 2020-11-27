@@ -45,14 +45,6 @@ USE Diner_restaurant_DJ
 GO
 
 
-CREATE TABLE InvoiceDetail (
-	idInvoiceDetail int IDENTITY(1,1),
-	quantity int,
-	amountWithoutTaxes decimal(10,2),
-	fkInvoice int, 
-	fkTaxRate decimal(4,2),
-	fkDish int);
-
 CREATE TABLE Menu (
 	idMenu int IDENTITY(1,1),
 	menuName varchar(50), 
@@ -72,13 +64,16 @@ CREATE TABLE Dish (
 	fkDishType int NOT NULL, 
 	fkMenu int, 
 	AmountWithTaxes decimal(5,2),
+	PRIMARY KEY (idDish),
 	FOREIGN KEY (fkDishType) REFERENCES DishType(idDishType),
 	FOREIGN KEY (fkMenu) REFERENCES Menu(idMenu),
 );
 
 CREATE TABLE TaxRate (
 	taxRateValue decimal(4,2), 
-	[description] varchar(100) );
+	[description] varchar(100),
+	PRIMARY KEY (taxRateValue),
+);
 
 CREATE TABLE [Table] (
 	idTable int IDENTITY(1,1),
@@ -123,9 +118,22 @@ CREATE TABLE [Invoice] (
 	fkWaiter int,
 	fkTable int,
 	fkPaymentCond int,
+	PRIMARY KEY (idInvoice),
 	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
 	FOREIGN KEY (fkPaymentCond) REFERENCES PaymentCondition(idPaymentCond),
+);
+
+CREATE TABLE InvoiceDetail (
+	idInvoiceDetail int IDENTITY(1,1),
+	quantity int,
+	amountWithoutTaxes decimal(10,2),
+	fkInvoice int, 
+	fkTaxRate decimal(4,2),
+	fkDish int,
+	FOREIGN KEY (fkInvoice) REFERENCES Invoice(idInvoice),
+	FOREIGN KEY (fkTaxRate) REFERENCES TaxRate(taxRateValue),
+	FOREIGN KEY (fkDish) REFERENCES Dish(idDish),
 );
 
 CREATE TABLE Booking (

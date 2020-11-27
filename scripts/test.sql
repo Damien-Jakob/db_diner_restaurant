@@ -72,3 +72,14 @@ INSERT INTO Invoice (fkTable)
 VALUES (20);
 INSERT INTO Invoice (fkPaymentCond)
 VALUES (10);
+
+-- All Should fail
+-- Invoice 100 should not exist
+-- TaxRate 20% should not exist
+-- Dish 35 should not exist
+INSERT INTO InvoiceDetail(fkInvoice)
+VALUES (100);
+INSERT INTO InvoiceDetail(fkTaxRate)
+VALUES (20);
+INSERT INTO InvoiceDetail(fkDish)
+VALUES (35);
