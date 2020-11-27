@@ -103,7 +103,6 @@ CREATE TABLE Responsible (
 	fkTable int NOT NULL,
 	FOREIGN KEY (fkPlanning) REFERENCES Planning(idPlanning),
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
-
 );
 
 CREATE TABLE PaymentCondition (
@@ -113,7 +112,6 @@ CREATE TABLE PaymentCondition (
 	PRIMARY KEY (idPaymentCond),
 );
 
--- TODO everything not null, except fkPaymentCond
 CREATE TABLE [Invoice] (
 	idInvoice int IDENTITY(1,1),
 	invoiceNumber varchar(45) NOT NULL,
@@ -132,7 +130,7 @@ CREATE TABLE [Invoice] (
 CREATE TABLE InvoiceDetail (
 	idInvoiceDetail int IDENTITY(1,1),
 	quantity int,
-	amountWithoutTaxes decimal(10,2),
+	amountWithTaxes decimal(10,2),
 	fkInvoice int, 
 	fkTaxRate decimal(4,2),
 	fkDish int,
