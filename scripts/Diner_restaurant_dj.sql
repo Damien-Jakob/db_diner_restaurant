@@ -94,7 +94,9 @@ CREATE TABLE [Table] (
 CREATE TABLE Waiter (
 	idWaiter int  IDENTITY(1,1),
 	firstName varchar(35),
-	lastName varchar(35));
+	lastName varchar(35),
+	CONSTRAINT uniqueName UNIQUE (firstname, lastName)
+);
 
 CREATE TABLE Planning (
 	idPlanning int IDENTITY(1,1),
