@@ -93,8 +93,8 @@ CREATE TABLE [Table] (
 
 CREATE TABLE Waiter (
 	idWaiter int  IDENTITY(1,1),
-	firstName varchar(35),
-	lastName varchar(35),
+	firstName varchar(35) NOT NULL,
+	lastName varchar(35) NOT NULL,
 	CONSTRAINT uniqueName UNIQUE (firstname, lastName)
 );
 

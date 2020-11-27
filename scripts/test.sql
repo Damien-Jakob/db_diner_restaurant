@@ -28,3 +28,10 @@ WHERE DishTypeName LIKE 'Viande';
 INSERT INTO waiter(firstname, lastName) 
 SELECT TOP(1) firstname, lastName FROM waiter
 ;
+-- Should fail
+INSERT INTO waiter(lastName) 
+VALUES ('Lennon');
+
+-- Should fail
+INSERT INTO waiter(firstname) 
+VALUES ('Bob');
