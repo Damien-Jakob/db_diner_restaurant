@@ -94,7 +94,7 @@ CREATE TABLE Planning (
 	dateWork datetime,
 	fkWaiter int,
 	PRIMARY KEY (idPlanning),
-	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
+	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter) ON DELETE CASCADE,
 	CONSTRAINT noPlanningInThePast CHECK (dateWork >= GETDATE()), 
 );
 

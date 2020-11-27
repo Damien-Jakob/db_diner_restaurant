@@ -124,3 +124,7 @@ INSERT INTO Planning (dateWork, fkWaiter) VALUES
 	DATEADD(DAY, 1, GETDATE()),
 	(SELECT idWaiter FROM Waiter WHERE firstName LIKE 'Henry' AND lastName LIKE 'Dupont')
 )
+
+-- Should delete the planning
+DELETE FROM Waiter
+WHERE firstName LIKE 'Henry' AND lastName LIKE 'Dupont';
