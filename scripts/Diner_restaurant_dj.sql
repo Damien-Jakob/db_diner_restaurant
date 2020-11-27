@@ -66,7 +66,9 @@ CREATE TABLE InvoiceDetail (
 CREATE TABLE Menu (
 	idMenu int IDENTITY(1,1),
 	menuName varchar(50), 
-	amountWithTaxes decimal (5,2));
+	amountWithTaxes decimal (5,2),
+	PRIMARY KEY (idMenu),
+);
 
 CREATE TABLE DishType (
 	idDishType int,
@@ -80,7 +82,8 @@ CREATE TABLE Dish (
 	fkDishType int NOT NULL, 
 	fkMenu int, 
 	AmountWithTaxes decimal(5,2),
-	FOREIGN KEY (fkDishType) REFERENCES DishType(idDishType)
+	FOREIGN KEY (fkDishType) REFERENCES DishType(idDishType),
+	FOREIGN KEY (fkMenu) REFERENCES Menu(idMenu),
 );
 
 CREATE TABLE TaxRate (

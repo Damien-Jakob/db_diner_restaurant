@@ -37,9 +37,18 @@ INSERT INTO waiter(firstname)
 VALUES ('Bob');
 
 -- Should fail
+-- Table 20 should not exist
 INSERT INTO Booking (fkTable)
 VALUES (20);
 
 -- Should fail
 INSERT INTO Booking (dateBooking)
 VALUES ('2000-01-01');
+
+-- Should fail
+-- Menu 15 should not exist
+INSERT INTO Dish (fkMenu, fkDishType)
+VALUES (
+	15, 
+	(SELECT TOP(1) idDishType FROM DishType)
+);
