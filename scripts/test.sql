@@ -11,5 +11,11 @@ SELECT Count(*) FROM DishType;
 SELECT Count(*) FROM Dish;
 
 -- Should fail
--- TODO update test
-INSERT INTO Dish (fkDishType) VALUES (10);
+INSERT INTO Dish (fkDishType) VALUES (
+	(SELECT idDishType FROM DishType WHERE DishTypeName LIKE 'Accompagnement')
+);
+
+-- Insert should succeed
+INSERT INTO Dish (fkDishType) VALUES (
+	(SELECT idDishType FROM DishType WHERE DishTypeName LIKE 'Viande')
+);

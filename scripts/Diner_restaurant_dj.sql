@@ -71,7 +71,7 @@ CREATE TABLE DishType (
 CREATE TABLE Dish (
 	idDish int IDENTITY(1,1),
 	dishDescription varchar(100), 
-	fkDishType int, 
+	fkDishType int NOT NULL, 
 	fkMenu int, 
 	AmountWithTaxes decimal(5,2),
 	FOREIGN KEY (fkDishType) REFERENCES DishType(idDishType)
