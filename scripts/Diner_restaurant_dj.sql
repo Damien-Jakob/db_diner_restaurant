@@ -186,13 +186,17 @@ insert into TaxRate values (2.5, 'Taxe réduit');
 insert into TaxRate values (3.7, 'Taxe spécial hébergement');
 
 
-INSERT INTO Menu (menuName) VALUES
-	('MEGA menu')
+INSERT INTO Menu (menuName, amountWithTaxes) VALUES
+	('MEGA menu', 103.70)
 ;
 
 INSERT INTO Planning (dateWork, fkWaiter) VALUES
 	(
 		'2150-01-01',
+		(SELECT TOP(1) idWaiter FROM Waiter)
+	),
+	(
+		'2150-01-02',
 		(SELECT TOP(1) idWaiter FROM Waiter)
 	)
 ;
@@ -232,9 +236,9 @@ INSERT INTO Invoice (
 	fkWaiter,
 	fkTable
 ) VALUES
-	(1, 10, 11, '2150-01-01', 1, 1),
-	(2, 20, 23, '2150-01-30', 3, 2),
-	(3, 30, 31, '2150-02-02', 2, 3),
-	(4, 10, 12, '2150-12-12', 2, 1),
-	(5, 15, 17.50, '2150-11-20', 1, 2)
+	('A4', 10, 11, '2150-01-01', 1, 1),
+	('U2', 20, 23, '2150-01-30', 3, 2),
+	('C4', 30, 31, '2150-02-02', 2, 3),
+	('R2D2', 10, 12, '2150-12-12', 2, 1),
+	('C3PO', 15, 17.50, '2150-11-20', 1, 2)
 ;
