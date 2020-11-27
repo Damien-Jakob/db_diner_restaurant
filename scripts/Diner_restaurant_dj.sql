@@ -123,6 +123,7 @@ CREATE TABLE Booking (
 	firstname varchar(35),
 	fkTable int,
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
+	CONSTRAINT noBookingInThePast CHECK (dateBooking >= GETDATE()), 
 );
 
 GO

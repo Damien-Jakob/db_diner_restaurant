@@ -39,3 +39,7 @@ VALUES ('Bob');
 -- Should fail
 INSERT INTO Booking (fkTable)
 VALUES (20);
+
+-- Should fail
+INSERT INTO Booking (dateBooking)
+VALUES ('2000-01-01');
