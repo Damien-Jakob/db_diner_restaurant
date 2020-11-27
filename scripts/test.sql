@@ -61,3 +61,14 @@ VALUES (10);
 -- Should fail
 INSERT INTO Planning (dateWork)
 VALUES ('2000-01-01');
+
+-- All should fail
+-- Waiter 10 Should not exist
+-- Table 20 should not exist
+-- PaymentCondition 10 should not exist
+INSERT INTO Invoice (fkWaiter)
+VALUES (10);
+INSERT INTO Invoice (fkTable)
+VALUES (20);
+INSERT INTO Invoice (fkPaymentCond)
+VALUES (10);

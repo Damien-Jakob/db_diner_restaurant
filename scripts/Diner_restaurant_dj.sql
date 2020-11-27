@@ -44,16 +44,6 @@ GO
 USE Diner_restaurant_DJ
 GO
 
--- TODO everything not null, except fkPaymentCond
-CREATE TABLE [Invoice] (
-	idInvoice int IDENTITY(1,1),
-	invoiceNumber varchar(45),
-	totalAmountWithTaxes decimal(10,2),
-	totalAmountWithoutTaxes decimal(10,2),
-	invoiceDate datetime, 
-	fkWaiter int,
-	fkTable int,
-	fkPaymentCond int);
 
 CREATE TABLE InvoiceDetail (
 	idInvoiceDetail int IDENTITY(1,1),
@@ -119,7 +109,24 @@ CREATE TABLE Responsible (
 CREATE TABLE PaymentCondition (
 	idPaymentCond int IDENTITY(1,1),
 	description varchar(100),
-	reduction decimal(4,2));
+	reduction decimal(4,2),
+	PRIMARY KEY (idPaymentCond),
+);
+
+-- TODO everything not null, except fkPaymentCond
+CREATE TABLE [Invoice] (
+	idInvoice int IDENTITY(1,1),
+	invoiceNumber varchar(45),
+	totalAmountWithTaxes decimal(10,2),
+	totalAmountWithoutTaxes decimal(10,2),
+	invoiceDate datetime, 
+	fkWaiter int,
+	fkTable int,
+	fkPaymentCond int,
+	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
+	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
+	FOREIGN KEY (fkPaymentCond) REFERENCES PaymentCondition(idPaymentCond),
+);
 
 CREATE TABLE Booking (
 	idBooking int IDENTITY(1,1),
