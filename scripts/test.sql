@@ -23,3 +23,10 @@ INSERT INTO Dish (fkDishType) VALUES (
 -- Should fail
 DELETE FROM DishType 
 WHERE DishTypeName LIKE 'Viande';
+
+SELECT TOP(1) firstname, lastName FROM waiter;
+
+-- Should fail
+INSERT INTO waiter(firstname, lastName) 
+SELECT TOP(1) firstname, lastName FROM waiter
+;
