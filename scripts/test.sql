@@ -115,3 +115,12 @@ INSERT INTO Responsible(fkPlanning, fkTable) VALUES
 -- Should fail
 INSERT INTO Booking (dateBooking)
 VALUES (DATEADD(DAY, 60, GETDATE()));
+
+-- Should succeed
+INSERT INTO Waiter (firstName, lastName) 
+VALUES ('Henry', 'Dupont');
+INSERT INTO Planning (dateWork, fkWaiter) VALUES
+(
+	DATEADD(DAY, 1, GETDATE()),
+	(SELECT idWaiter FROM Waiter WHERE firstName LIKE 'Henry' AND lastName LIKE 'Dupont')
+)
