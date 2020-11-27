@@ -131,9 +131,12 @@ CREATE TABLE InvoiceDetail (
 	fkInvoice int, 
 	fkTaxRate decimal(4,2),
 	fkDish int,
+	fkMenu int,
 	FOREIGN KEY (fkInvoice) REFERENCES Invoice(idInvoice),
 	FOREIGN KEY (fkTaxRate) REFERENCES TaxRate(taxRateValue),
 	FOREIGN KEY (fkDish) REFERENCES Dish(idDish),
+	FOREIGN KEY (fkMenu) REFERENCES Menu(idMenu),
+	CONSTRAINT concernsAnItem CHECK (fkDish IS NOT NULL OR fkMenu IS NOT NULL), 
 );
 
 CREATE TABLE Booking (
@@ -192,6 +195,10 @@ INSERT INTO Invoice (invoiceNumber) VALUES (2);
 INSERT INTO Invoice (invoiceNumber) VALUES (3);
 INSERT INTO Invoice (invoiceNumber) VALUES (4);
 INSERT INTO Invoice (invoiceNumber) VALUES (5);
+
+INSERT INTO Menu (menuName) VALUES
+	('MEGA menu')
+;
 
 INSERT INTO DishType (idDishType, DishTypeName) VALUES
 (1, 'Entrées'),

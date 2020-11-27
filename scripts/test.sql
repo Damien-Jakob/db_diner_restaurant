@@ -77,9 +77,27 @@ VALUES (10);
 -- Invoice 100 should not exist
 -- TaxRate 20% should not exist
 -- Dish 35 should not exist
-INSERT INTO InvoiceDetail(fkInvoice)
-VALUES (100);
-INSERT INTO InvoiceDetail(fkTaxRate)
-VALUES (20);
+INSERT INTO InvoiceDetail(fkInvoice, fkDish)
+VALUES (
+	100,
+	(SELECT TOP(1) idDishType FROM DishType)
+);
+INSERT INTO InvoiceDetail(fkTaxRate, fkDish)
+VALUES (
+	20,
+	(SELECT TOP(1) idDishType FROM DishType)
+);
 INSERT INTO InvoiceDetail(fkDish)
 VALUES (35);
+
+-- Should fail
+INSERT INTO InvoiceDetail(quantity)
+VALUES (1);
+
+-- All should succeed
+INSERT INTO InvoiceDetail(fkDish) VALUES (
+	(SELECT TOP(1) idDish FROM Dish)
+);
+INSERT INTO InvoiceDetail(fkMenu) VALUES (
+	(SELECT TOP(1) idMenu FROM Menu)
+);
