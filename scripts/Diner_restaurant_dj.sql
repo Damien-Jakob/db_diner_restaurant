@@ -56,12 +56,11 @@ CREATE TABLE DishType (
 );
 
 CREATE TABLE Dish (
-	idDish int IDENTITY(1,1),
+	idDish int IDENTITY(1,1) PRIMARY KEY,
 	dishDescription varchar(100) NOT NULL, 
 	fkDishType int NOT NULL, 
 	fkMenu int, 
 	AmountWithTaxes decimal(5,2) NOT NULL,
-	PRIMARY KEY (idDish),
 	FOREIGN KEY (fkDishType) REFERENCES DishType(idDishType),
 	FOREIGN KEY (fkMenu) REFERENCES Menu(idMenu),
 );
@@ -88,7 +87,7 @@ CREATE TABLE Planning (
 	dateWork datetime NOT NULL,
 	fkWaiter int NOT NULL,
 	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter) ON DELETE CASCADE,
-	CONSTRAINT noPlanningInThePast CHECK (dateWork >= GETDATE()), 
+	CONSTRAINT noPlanningInThePast CHECK (dateWork > GETDATE()), 
 );
 
 CREATE TABLE Responsible (
@@ -117,6 +116,7 @@ CREATE TABLE [Invoice] (
 	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
 	FOREIGN KEY (fkPaymentCond) REFERENCES PaymentCondition(idPaymentCond),
+	-- ON DELETE CASCADE
 );
 
 CREATE TABLE InvoiceDetail (
@@ -143,8 +143,9 @@ CREATE TABLE Booking (
 	firstname varchar(35),
 	fkTable int NOT NULL,
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
-	CONSTRAINT noBookingInThePast CHECK (dateBooking >= GETDATE()),
-	CONSTRAINT noBookingTooFarAway CHECK (dateBooking <= DATEADD(DAY, 28, GETDATE())), 
+	-- ON DELETE CASCADE
+	CONSTRAINT noBookingInThePast CHECK (dateBooking > GETDATE()),
+	CONSTRAINT noBookingTooFarAway CHECK (dateBooking < DATEADD(MONTH, 2, GETDATE())), 
 );
 GO
 
