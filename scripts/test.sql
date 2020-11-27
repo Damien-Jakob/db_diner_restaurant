@@ -111,3 +111,7 @@ INSERT INTO Responsible(fkPlanning, fkTable) VALUES
 		50
 	)
 ;
+
+-- Should fail
+INSERT INTO Booking (dateBooking)
+VALUES (DATEADD(DAY, 60, GETDATE()));

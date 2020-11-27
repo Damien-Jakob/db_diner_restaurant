@@ -151,9 +151,9 @@ CREATE TABLE Booking (
 	firstname varchar(35),
 	fkTable int,
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
-	CONSTRAINT noBookingInThePast CHECK (dateBooking >= GETDATE()), 
+	CONSTRAINT noBookingInThePast CHECK (dateBooking >= GETDATE()),
+	CONSTRAINT noBookingTooFarAway CHECK (dateBooking <= DATEADD(DAY, 28, GETDATE())), 
 );
-
 GO
 
 
