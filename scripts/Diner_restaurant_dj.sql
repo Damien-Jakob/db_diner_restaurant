@@ -109,6 +109,7 @@ CREATE TABLE Planning (
 	dateWork datetime,
 	fkWaiter int,
 	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
+	CONSTRAINT noPlanningInThePast CHECK (dateWork >= GETDATE()), 
 );
 
 CREATE TABLE Responsible (

@@ -57,3 +57,7 @@ VALUES (
 -- Waiter 10 Should not exist
 INSERT INTO Planning(fkWaiter)
 VALUES (10);
+
+-- Should fail
+INSERT INTO Planning (dateWork)
+VALUES ('2000-01-01');
