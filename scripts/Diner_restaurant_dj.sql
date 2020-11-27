@@ -100,13 +100,16 @@ CREATE TABLE Waiter (
 	idWaiter int  IDENTITY(1,1),
 	firstName varchar(35) NOT NULL,
 	lastName varchar(35) NOT NULL,
+	PRIMARY KEY (idWaiter),
 	CONSTRAINT uniqueName UNIQUE (firstname, lastName)
 );
 
 CREATE TABLE Planning (
 	idPlanning int IDENTITY(1,1),
 	dateWork datetime,
-	fkWaiter int);
+	fkWaiter int,
+	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
+);
 
 CREATE TABLE Responsible (
 	fkPlanning int,

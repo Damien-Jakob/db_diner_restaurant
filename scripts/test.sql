@@ -52,3 +52,8 @@ VALUES (
 	15, 
 	(SELECT TOP(1) idDishType FROM DishType)
 );
+
+-- Should fail
+-- Waiter 10 Should not exist
+INSERT INTO Planning(fkWaiter)
+VALUES (10);
