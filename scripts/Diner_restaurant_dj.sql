@@ -190,12 +190,6 @@ INSERT INTO Menu (menuName) VALUES
 	('MEGA menu')
 ;
 
-INSERT INTO [Table] (capacity) VALUES
-	(10),
-	(3),
-	(2)
-;
-
 INSERT INTO Planning (dateWork, fkWaiter) VALUES
 	(
 		'2150-01-01',
@@ -204,30 +198,30 @@ INSERT INTO Planning (dateWork, fkWaiter) VALUES
 ;
 
 INSERT INTO DishType (idDishType, DishTypeName) VALUES
-(1, 'Entrées'),
-(2, 'Poissons'),
-(3, 'Viande'),
-(4, 'Fromages'),
-(5, 'Dessert')
+	(1, 'Entrées'),
+	(2, 'Poissons'),
+	(3, 'Viande'),
+	(4, 'Fromages'),
+	(5, 'Dessert')
 ;
 
 INSERT INTO Dish (dishDescription, AmountWithTaxes, fkDishType) VALUES
-('Risotto tessinois bio aux truffes de Bourgogne et mascarpone', 31, 1),
-('Gravlax de chevreuil aux citrons confits et câprons', 30, 1),
-('Terrine de foie gras aux figues et pain d’épices', 29, 1),
-('Tataki de thon aux pistaches de Bronte', 45, 2),
-('Scalopines de saumon du Tessin, beurre blanc', 46, 2),
-('Noix Saint-Jacques et gambas en brochette de romarin', 49, 2),
-('Médaillons de renne poivrade', 54, 3),
-('Suprême de canard sauvage à l’orange', 48, 3),
-('Ris de veau façon saltimbocca à la sauge', 45, 3),
-('Tournedos de boeuf, vierge automnale aux marrons et pignons', 50, 3),
-('Selle de chevreuil à la raisineé (dès 2 pers.)', 52, 3),
-('Assiette de fromages ', 21, 4),
-('Chaud-froid au chocolat noir, sorbet aux poires', 19, 5),
-('Opéra au café et chocolat', 20, 5),
-('Symphonie de crèmes brûlées aux saveurs différentes', 19, 5),
-('Bavarois de poires en verrine, émiettée de spéculoos', 19, 5)
+	('Risotto tessinois bio aux truffes de Bourgogne et mascarpone', 31, 1),
+	('Gravlax de chevreuil aux citrons confits et câprons', 30, 1),
+	('Terrine de foie gras aux figues et pain d’épices', 29, 1),
+	('Tataki de thon aux pistaches de Bronte', 45, 2),
+	('Scalopines de saumon du Tessin, beurre blanc', 46, 2),
+	('Noix Saint-Jacques et gambas en brochette de romarin', 49, 2),
+	('Médaillons de renne poivrade', 54, 3),
+	('Suprême de canard sauvage à l’orange', 48, 3),
+	('Ris de veau façon saltimbocca à la sauge', 45, 3),
+	('Tournedos de boeuf, vierge automnale aux marrons et pignons', 50, 3),
+	('Selle de chevreuil à la raisineé (dès 2 pers.)', 52, 3),
+	('Assiette de fromages ', 21, 4),
+	('Chaud-froid au chocolat noir, sorbet aux poires', 19, 5),
+	('Opéra au café et chocolat', 20, 5),
+	('Symphonie de crèmes brûlées aux saveurs différentes', 19, 5),
+	('Bavarois de poires en verrine, émiettée de spéculoos', 19, 5)
 ;
 
 INSERT INTO Invoice (
