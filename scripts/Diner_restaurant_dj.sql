@@ -111,12 +111,12 @@ CREATE TABLE PaymentCondition (
 -- TODO everything not null, except fkPaymentCond
 CREATE TABLE [Invoice] (
 	idInvoice int IDENTITY(1,1),
-	invoiceNumber varchar(45),
-	totalAmountWithTaxes decimal(10,2),
-	totalAmountWithoutTaxes decimal(10,2),
-	invoiceDate datetime, 
-	fkWaiter int,
-	fkTable int,
+	invoiceNumber varchar(45) NOT NULL,
+	totalAmountWithTaxes decimal(10,2) NOT NULL,
+	totalAmountWithoutTaxes decimal(10,2) NOT NULL,
+	invoiceDate datetime NOT NULL, 
+	fkWaiter int NOT NULL,
+	fkTable int NOT NULL,
 	fkPaymentCond int,
 	PRIMARY KEY (idInvoice),
 	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
@@ -190,14 +190,14 @@ insert into TaxRate values (2.5, 'Taxe réduit');
 insert into TaxRate values (3.7, 'Taxe spécial hébergement');
 
 
-INSERT INTO Invoice (invoiceNumber) VALUES (1);
-INSERT INTO Invoice (invoiceNumber) VALUES (2);
-INSERT INTO Invoice (invoiceNumber) VALUES (3);
-INSERT INTO Invoice (invoiceNumber) VALUES (4);
-INSERT INTO Invoice (invoiceNumber) VALUES (5);
-
 INSERT INTO Menu (menuName) VALUES
 	('MEGA menu')
+;
+
+INSERT INTO [Table] (capacity) VALUES
+	(10),
+	(3),
+	(2)
 ;
 
 INSERT INTO DishType (idDishType, DishTypeName) VALUES
@@ -225,4 +225,19 @@ INSERT INTO Dish (dishDescription, AmountWithTaxes, fkDishType) VALUES
 ('Opéra au café et chocolat', 20, 5),
 ('Symphonie de crèmes brûlées aux saveurs différentes', 19, 5),
 ('Bavarois de poires en verrine, émiettée de spéculoos', 19, 5)
+;
+
+INSERT INTO Invoice (
+	invoiceNumber,
+	totalAmountWithTaxes,
+	totalAmountWithoutTaxes,
+	invoiceDate, 
+	fkWaiter,
+	fkTable
+) VALUES
+	(1, 10, 11, '2150-01-01', 1, 1),
+	(2, 20, 23, '2150-01-30', 3, 2),
+	(3, 30, 31, '2150-02-02', 2, 3),
+	(4, 10, 12, '2150-12-12', 2, 1),
+	(5, 15, 17.50, '2150-11-20', 1, 2)
 ;
