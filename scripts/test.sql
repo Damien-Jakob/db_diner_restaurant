@@ -19,3 +19,7 @@ INSERT INTO Dish (fkDishType) VALUES (
 INSERT INTO Dish (fkDishType) VALUES (
 	(SELECT idDishType FROM DishType WHERE DishTypeName LIKE 'Viande')
 );
+
+-- Should fail
+DELETE FROM DishType 
+WHERE DishTypeName LIKE 'Viande';
