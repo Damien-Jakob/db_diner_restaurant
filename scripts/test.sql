@@ -11,13 +11,17 @@ SELECT Count(*) FROM DishType;
 SELECT Count(*) FROM Dish;
 
 -- Should fail
-INSERT INTO Dish (fkDishType) VALUES (
-	(SELECT idDishType FROM DishType WHERE DishTypeName LIKE 'Accompagnement')
+INSERT INTO Dish (dishDescription, fkDishType, AmountWithTaxes) VALUES (
+	'fake dish',
+	(SELECT idDishType FROM DishType WHERE DishTypeName LIKE 'Accompagnement'),
+	12.50
 );
 
 -- Insert should succeed
-INSERT INTO Dish (fkDishType) VALUES (
-	(SELECT idDishType FROM DishType WHERE DishTypeName LIKE 'Viande')
+INSERT INTO Dish (dishDescription, fkDishType, AmountWithTaxes) VALUES (
+	'Not a fake dish',
+	(SELECT idDishType FROM DishType WHERE DishTypeName LIKE 'Viande'),
+	12.50
 );
 
 -- Should fail
@@ -38,92 +42,137 @@ VALUES ('Bob');
 
 -- Should fail
 -- Table 20 should not exist
-INSERT INTO Booking (fkTable)
-VALUES (20);
+INSERT INTO Booking (dateBooking, nbPers, lastname, fkTable)
+VALUES (DATEADD(MONTH, 1, GETDATE()), 1, 'Lennon', 20);
 
 -- Should fail
-INSERT INTO Booking (dateBooking)
-VALUES ('2000-01-01');
+INSERT INTO Booking (dateBooking, nbPers, lastname, fkTable)
+VALUES ('2000-01-01', 1, 'Lennon', 
+	(SELECT TOP(1) idTable FROM [Table])
+);
 
 -- Should fail
 -- Menu 15 should not exist
-INSERT INTO Dish (fkMenu, fkDishType)
+INSERT INTO Dish (dishDescription, fkMenu, fkDishType, AmountWithTaxes)
 VALUES (
+	'Soupe',
 	15, 
-	(SELECT TOP(1) idDishType FROM DishType)
+	(SELECT TOP(1) idDishType FROM DishType),
+	3.50
 );
 
 -- Should fail
 -- Waiter 10 Should not exist
-INSERT INTO Planning(fkWaiter)
-VALUES (10);
+INSERT INTO Planning(fkWaiter, dateWork)
+VALUES (10, '2150-01-01');
 
 -- Should fail
-INSERT INTO Planning (dateWork)
-VALUES ('2000-01-01');
+INSERT INTO Planning (dateWork, fkWaiter)
+VALUES (
+	'2000-01-01',
+	(SELECT TOP(1) idWaiter FROM Waiter)
+);
 
 -- All should fail
 -- Waiter 10 Should not exist
 -- Table 20 should not exist
 -- PaymentCondition 10 should not exist
-INSERT INTO Invoice (fkWaiter)
-VALUES (10);
-INSERT INTO Invoice (fkTable)
-VALUES (20);
-INSERT INTO Invoice (fkPaymentCond)
-VALUES (10);
+INSERT INTO Invoice (invoiceNumber, totalAmountWithTaxes, totalAmountWithoutTaxes, invoiceDate, fkWaiter, fkTable, fkPaymentCond)
+VALUES (
+	'RB12', 123.45, 110, '2150-01-01',
+	10,
+	(SELECT TOP(1) idTable FROM [Table]),
+	NULL
+);
+INSERT INTO Invoice (invoiceNumber, totalAmountWithTaxes, totalAmountWithoutTaxes, invoiceDate, fkWaiter, fkTable, fkPaymentCond)
+VALUES (
+	'RB12', 123.45, 110, '2150-01-01',
+	(SELECT TOP(1) idWaiter FROM Waiter),
+	20,
+	NULL
+);
+INSERT INTO Invoice (invoiceNumber, totalAmountWithTaxes, totalAmountWithoutTaxes, invoiceDate, fkWaiter, fkTable, fkPaymentCond)
+VALUES (
+	'RB12', 123.45, 110, '2150-01-01',
+	(SELECT TOP(1) idWaiter FROM Waiter),
+	(SELECT TOP(1) idTable FROM [Table]),
+	10
+);
 
 -- All Should fail
 -- Invoice 100 should not exist
 -- TaxRate 20% should not exist
 -- Dish 35 should not exist
-INSERT INTO InvoiceDetail(fkInvoice, fkDish)
+INSERT INTO InvoiceDetail(fkInvoice, fkTaxRate, fkDish, quantity, amountWithTaxes)
 VALUES (
 	100,
-	(SELECT TOP(1) idDishType FROM DishType)
+	(SELECT TOP(1) taxRateValue FROM TaxRate),
+	(SELECT TOP(1) idDish FROM Dish),
+	1, 13.50
 );
-INSERT INTO InvoiceDetail(fkTaxRate, fkDish)
+INSERT INTO InvoiceDetail(fkInvoice, fkTaxRate, fkDish, quantity, amountWithTaxes)
 VALUES (
+	(SELECT TOP(1) idInvoice FROM Invoice),
 	20,
-	(SELECT TOP(1) idDishType FROM DishType)
+	(SELECT TOP(1) idDish FROM Dish),
+	1, 13.50
 );
-INSERT INTO InvoiceDetail(fkDish)
-VALUES (35);
+INSERT INTO InvoiceDetail(fkInvoice, fkTaxRate, fkDish, quantity, amountWithTaxes)
+VALUES (
+	(SELECT TOP(1) idInvoice FROM Invoice),
+	(SELECT TOP(1) taxRateValue FROM TaxRate),
+	35,
+	1, 13.50
+);
 
 -- Should fail
-INSERT INTO InvoiceDetail(quantity)
-VALUES (1);
+INSERT INTO InvoiceDetail(fkInvoice, fkTaxRate, quantity, amountWithTaxes)
+VALUES (
+	(SELECT TOP(1) idInvoice FROM Invoice),
+	(SELECT TOP(1) taxRateValue FROM TaxRate),
+	1, 13.50
+);
 
 -- All should succeed
-INSERT INTO InvoiceDetail(fkDish) VALUES (
-	(SELECT TOP(1) idDish FROM Dish)
+INSERT INTO InvoiceDetail(fkInvoice, fkTaxRate, fkDish, quantity, amountWithTaxes)
+VALUES (
+	(SELECT TOP(1) idInvoice FROM Invoice),
+	(SELECT TOP(1) taxRateValue FROM TaxRate),
+	(SELECT TOP(1) idDish FROM Dish),
+	1, 13.50
 );
-INSERT INTO InvoiceDetail(fkMenu) VALUES (
-	(SELECT TOP(1) idMenu FROM Menu)
+
+INSERT INTO InvoiceDetail(fkInvoice, fkTaxRate, fkMenu, quantity, amountWithTaxes)
+VALUES (
+	(SELECT TOP(1) idInvoice FROM Invoice),
+	(SELECT TOP(1) taxRateValue FROM TaxRate),
+	(SELECT TOP(1) idMenu FROM Menu),
+	1, 13.50
 );
 
 -- Should fail
 -- Table 50 should not exist
--- Table 125 should not exist
-INSERT INTO Responsible(fkPlanning, fkTable) VALUES
-	(
-		(SELECT TOP(1) idPlanning FROM Planning),
-		50
-	)
-;
+-- Planning 125 should not exist
+INSERT INTO Responsible(fkPlanning, fkTable) VALUES (
+	(SELECT TOP(1) idPlanning FROM Planning),
+	50
+);
 
 -- Should fail
-INSERT INTO Booking (dateBooking)
-VALUES (DATEADD(DAY, 60, GETDATE()));
+INSERT INTO Booking (dateBooking, nbPers, lastname, fkTable)
+VALUES (
+	DATEADD(MONTH, 2, GETDATE()),
+	1, 'Lennon',
+	(SELECT TOP(1) idTable FROM [Table])
+);
 
 -- Should succeed
 INSERT INTO Waiter (firstName, lastName) 
 VALUES ('Henry', 'Dupont');
-INSERT INTO Planning (dateWork, fkWaiter) VALUES
-(
+INSERT INTO Planning (dateWork, fkWaiter) VALUES (
 	DATEADD(DAY, 1, GETDATE()),
 	(SELECT idWaiter FROM Waiter WHERE firstName LIKE 'Henry' AND lastName LIKE 'Dupont')
-)
+);
 
 -- Should delete the planning
 DELETE FROM Waiter
