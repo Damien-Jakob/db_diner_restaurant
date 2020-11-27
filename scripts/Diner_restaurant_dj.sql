@@ -25,8 +25,13 @@ GO
 -------------------------------------------------------------------------------------------------------
 
 --CREATE DATABASE .....
-
-CREATE DATABASE Diner_restaurant_DJ;
+CREATE DATABASE Diner_restaurant_DJ
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'test', FILENAME = N'C:\db\Diner_restaurant_DJ\Diner_restaurant_DJ.mdf' , SIZE = 8192KB , FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'test_log', FILENAME = N'C:\db\Diner_restaurant_DJ\Diner_restaurant_DJ_log.ldf' , SIZE = 8192KB , FILEGROWTH = 65536KB )
+GO
 GO
 
 -------------------------------------------------------------------------------------------------------
