@@ -35,3 +35,7 @@ VALUES ('Lennon');
 -- Should fail
 INSERT INTO waiter(firstname) 
 VALUES ('Bob');
+
+-- Should fail
+INSERT INTO Booking (fkTable)
+VALUES (20);

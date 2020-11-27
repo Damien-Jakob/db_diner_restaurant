@@ -89,7 +89,9 @@ CREATE TABLE TaxRate (
 
 CREATE TABLE [Table] (
 	idTable int IDENTITY(1,1),
-	capacity tinyint);
+	capacity tinyint,
+	PRIMARY KEY (idTable),
+);
 
 CREATE TABLE Waiter (
 	idWaiter int  IDENTITY(1,1),
@@ -119,7 +121,9 @@ CREATE TABLE Booking (
 	phonenumber varchar(20),
 	lastname varchar(35),
 	firstname varchar(35),
-	fkTable int);
+	fkTable int,
+	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
+);
 
 GO
 
