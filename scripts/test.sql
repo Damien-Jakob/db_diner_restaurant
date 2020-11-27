@@ -9,3 +9,7 @@ SELECT Count(*) FROM DishType;
 
 -- Should be 16
 SELECT Count(*) FROM Dish;
+
+-- Should fail
+-- TODO update test
+INSERT INTO Dish (fkDishType) VALUES (10);
