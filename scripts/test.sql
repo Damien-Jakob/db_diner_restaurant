@@ -101,3 +101,13 @@ INSERT INTO InvoiceDetail(fkDish) VALUES (
 INSERT INTO InvoiceDetail(fkMenu) VALUES (
 	(SELECT TOP(1) idMenu FROM Menu)
 );
+
+-- Should fail
+-- Table 50 should not exist
+-- Table 125 should not exist
+INSERT INTO Responsible(fkPlanning, fkTable) VALUES
+	(
+		(SELECT TOP(1) idPlanning FROM Planning),
+		50
+	)
+;

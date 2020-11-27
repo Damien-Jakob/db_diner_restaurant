@@ -93,13 +93,18 @@ CREATE TABLE Planning (
 	idPlanning int IDENTITY(1,1),
 	dateWork datetime,
 	fkWaiter int,
+	PRIMARY KEY (idPlanning),
 	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
 	CONSTRAINT noPlanningInThePast CHECK (dateWork >= GETDATE()), 
 );
 
 CREATE TABLE Responsible (
-	fkPlanning int,
-	fkTable int);
+	fkPlanning int NOT NULL,
+	fkTable int NOT NULL,
+	FOREIGN KEY (fkPlanning) REFERENCES Planning(idPlanning),
+	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
+
+);
 
 CREATE TABLE PaymentCondition (
 	idPaymentCond int IDENTITY(1,1),
@@ -198,6 +203,13 @@ INSERT INTO [Table] (capacity) VALUES
 	(10),
 	(3),
 	(2)
+;
+
+INSERT INTO Planning (dateWork, fkWaiter) VALUES
+	(
+		'2150-01-01',
+		(SELECT TOP(1) idWaiter FROM Waiter)
+	)
 ;
 
 INSERT INTO DishType (idDishType, DishTypeName) VALUES
