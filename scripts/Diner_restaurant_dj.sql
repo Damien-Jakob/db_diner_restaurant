@@ -13,6 +13,7 @@ SET NOCOUNT ON
 
 IF DB_ID (N'Diner_restaurant_DJ') IS NOT NULL
 BEGIN
+	--Disconnect everyone except the admin
 	alter database Diner_restaurant_DJ set single_user with rollback immediate;
 	DROP DATABASE Diner_restaurant_DJ;
 END
@@ -33,7 +34,6 @@ CREATE DATABASE Diner_restaurant_DJ
  LOG ON 
 ( NAME = N'test_log', FILENAME = N'C:\db\Diner_restaurant_DJ\Diner_restaurant_DJ_log.ldf' , SIZE = 8192KB , FILEGROWTH = 65536KB )
 GO
-GO
 
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
@@ -44,56 +44,49 @@ GO
 USE Diner_restaurant_DJ
 GO
 
-
 CREATE TABLE Menu (
-	idMenu int IDENTITY(1,1),
-	menuName varchar(50), 
-	amountWithTaxes decimal (5,2),
-	PRIMARY KEY (idMenu),
+	idMenu int IDENTITY(1,1) PRIMARY KEY,
+	menuName varchar(50) NOT NULL, 
+	amountWithTaxes decimal (5,2) NOT NULL,
 );
 
 CREATE TABLE DishType (
-	idDishType int,
-	DishTypeName varchar(100),
-	PRIMARY KEY (idDishType),
+	idDishType int PRIMARY KEY,
+	DishTypeName varchar(100) NOT NULL,
 );
 
 CREATE TABLE Dish (
 	idDish int IDENTITY(1,1),
-	dishDescription varchar(100), 
+	dishDescription varchar(100) NOT NULL, 
 	fkDishType int NOT NULL, 
 	fkMenu int, 
-	AmountWithTaxes decimal(5,2),
+	AmountWithTaxes decimal(5,2) NOT NULL,
 	PRIMARY KEY (idDish),
 	FOREIGN KEY (fkDishType) REFERENCES DishType(idDishType),
 	FOREIGN KEY (fkMenu) REFERENCES Menu(idMenu),
 );
 
 CREATE TABLE TaxRate (
-	taxRateValue decimal(4,2), 
+	taxRateValue decimal(4,2) PRIMARY KEY, 
 	[description] varchar(100),
-	PRIMARY KEY (taxRateValue),
 );
 
 CREATE TABLE [Table] (
-	idTable int IDENTITY(1,1),
-	capacity tinyint,
-	PRIMARY KEY (idTable),
+	idTable int IDENTITY(1,1) PRIMARY KEY,
+	capacity tinyint NOT NULL,
 );
 
 CREATE TABLE Waiter (
-	idWaiter int  IDENTITY(1,1),
+	idWaiter int  IDENTITY(1,1) PRIMARY KEY,
 	firstName varchar(35) NOT NULL,
 	lastName varchar(35) NOT NULL,
-	PRIMARY KEY (idWaiter),
 	CONSTRAINT uniqueName UNIQUE (firstname, lastName)
 );
 
 CREATE TABLE Planning (
-	idPlanning int IDENTITY(1,1),
-	dateWork datetime,
-	fkWaiter int,
-	PRIMARY KEY (idPlanning),
+	idPlanning int IDENTITY(1,1) PRIMARY KEY,
+	dateWork datetime NOT NULL,
+	fkWaiter int NOT NULL,
 	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter) ON DELETE CASCADE,
 	CONSTRAINT noPlanningInThePast CHECK (dateWork >= GETDATE()), 
 );
@@ -101,19 +94,19 @@ CREATE TABLE Planning (
 CREATE TABLE Responsible (
 	fkPlanning int NOT NULL,
 	fkTable int NOT NULL,
+	PRIMARY KEY(fkPlanning, fkTable),
 	FOREIGN KEY (fkPlanning) REFERENCES Planning(idPlanning),
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
 );
 
 CREATE TABLE PaymentCondition (
-	idPaymentCond int IDENTITY(1,1),
-	description varchar(100),
-	reduction decimal(4,2),
-	PRIMARY KEY (idPaymentCond),
+	idPaymentCond int IDENTITY(1,1) PRIMARY KEY,
+	description varchar(100) NOT NULL,
+	reduction decimal(4,2) NOT NULL,
 );
 
 CREATE TABLE [Invoice] (
-	idInvoice int IDENTITY(1,1),
+	idInvoice int IDENTITY(1,1) PRIMARY KEY,
 	invoiceNumber varchar(45) NOT NULL,
 	totalAmountWithTaxes decimal(10,2) NOT NULL,
 	totalAmountWithoutTaxes decimal(10,2) NOT NULL,
@@ -121,18 +114,17 @@ CREATE TABLE [Invoice] (
 	fkWaiter int NOT NULL,
 	fkTable int NOT NULL,
 	fkPaymentCond int,
-	PRIMARY KEY (idInvoice),
 	FOREIGN KEY (fkWaiter) REFERENCES Waiter(idWaiter),
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
 	FOREIGN KEY (fkPaymentCond) REFERENCES PaymentCondition(idPaymentCond),
 );
 
 CREATE TABLE InvoiceDetail (
-	idInvoiceDetail int IDENTITY(1,1),
-	quantity int,
-	amountWithTaxes decimal(10,2),
-	fkInvoice int, 
-	fkTaxRate decimal(4,2),
+	idInvoiceDetail int IDENTITY(1,1) PRIMARY KEY,
+	quantity int NOT NULL,
+	amountWithTaxes decimal(10,2) NOT NULL,
+	fkInvoice int NOT NULL, 
+	fkTaxRate decimal(4,2) NOT NULL,
 	fkDish int,
 	fkMenu int,
 	FOREIGN KEY (fkInvoice) REFERENCES Invoice(idInvoice),
@@ -143,13 +135,13 @@ CREATE TABLE InvoiceDetail (
 );
 
 CREATE TABLE Booking (
-	idBooking int IDENTITY(1,1),
-	dateBooking datetime,
-	nbPers tinyint,
+	idBooking int IDENTITY(1,1) PRIMARY KEY,
+	dateBooking datetime NOT NULL,
+	nbPers tinyint NOT NULL,
 	phonenumber varchar(20),
-	lastname varchar(35),
+	lastname varchar(35) NOT NULL,
 	firstname varchar(35),
-	fkTable int,
+	fkTable int NOT NULL,
 	FOREIGN KEY (fkTable) REFERENCES [Table](idTable),
 	CONSTRAINT noBookingInThePast CHECK (dateBooking >= GETDATE()),
 	CONSTRAINT noBookingTooFarAway CHECK (dateBooking <= DATEADD(DAY, 28, GETDATE())), 
