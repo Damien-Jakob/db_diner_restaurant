@@ -1,6 +1,3 @@
-/* This script creates a database for the management of booking and invoice of a restaurant
-	The database is initialized with fake data and data coming from the restaurant "Hotel de Ville" in Echallens
-*/
 USE master
 GO
 SET NOCOUNT ON
@@ -11,7 +8,7 @@ SET NOCOUNT ON
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 
-IF DB_ID (N'Diner_restaurant_DJ') IS NOT NULL
+-- IF DB_ID (N'Diner_restaurant_DJ') IS NOT NULL
 BEGIN
 	--Disconnect everyone except the admin
 	alter database Diner_restaurant_DJ set single_user with rollback immediate;
@@ -107,8 +104,8 @@ CREATE TABLE PaymentCondition (
 CREATE TABLE [Invoice] (
 	idInvoice int IDENTITY(1,1) PRIMARY KEY,
 	invoiceNumber varchar(45) NOT NULL,
-	totalAmountWithTaxes decimal(10,2) NOT NULL,
-	totalAmountWithoutTaxes decimal(10,2) NOT NULL,
+	totalAmountWithTaxes decimal(10,2) NOT NULL DEFAULT 0,
+	totalAmountWithoutTaxes decimal(10,2) NOT NULL DEFAULT 0,
 	invoiceDate datetime NOT NULL, 
 	fkWaiter int NOT NULL,
 	fkTable int NOT NULL,
@@ -149,6 +146,49 @@ CREATE TABLE Booking (
 );
 GO
 
+-- triggers
+CREATE TRIGGER updateInvoiceAfterInsert
+ON InvoiceDetail
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+	DECLARE @amountWithTaxes AS DECIMAL(10,2);
+	DECLARE @invoiceId AS INT;
+	DECLARE @taxRate AS DECIMAL(4,2);
+	DECLARE cursorInvoiceDetail CURSOR FOR
+		SELECT amountWithTaxes, fkInvoice, fkTaxRate 
+		FROM inserted;
+	OPEN cursorInvoiceDetail;
+	FETCH cursorInvoiceDetail INTO 
+		@amountWithTaxes, @invoiceId, @taxRate
+	WHILE (@@FETCH_STATUS=0) BEGIN
+		UPDATE Invoice SET
+			totalAmountWithoutTaxes = totalAmountWithoutTaxes + @amountWithTaxes / (1 + @taxRate/100),
+			totalAmountWithTaxes = totalAmountWithTaxes + @amountWithTaxes
+		WHERE idInvoice = @invoiceId;
+		FETCH cursorInvoiceDetail INTO 
+			@amountWithTaxes, @invoiceId, @taxRate;
+	END;
+	CLOSE cursorInvoiceDetail;
+	DEALLOCATE cursorInvoiceDetail;
+	DECLARE cursorInvoiceDetail CURSOR FOR
+		SELECT amountWithTaxes, fkInvoice, fkTaxRate 
+		FROM deleted;
+	OPEN cursorInvoiceDetail;
+	FETCH cursorInvoiceDetail INTO 
+		@amountWithTaxes, @invoiceId, @taxRate
+	WHILE (@@FETCH_STATUS=0) BEGIN
+		UPDATE Invoice SET
+			totalAmountWithoutTaxes = totalAmountWithoutTaxes - @amountWithTaxes / (1 + @taxRate/100),
+			totalAmountWithTaxes = totalAmountWithTaxes - @amountWithTaxes
+		WHERE idInvoice = @invoiceId;
+		FETCH cursorInvoiceDetail INTO 
+			@amountWithTaxes, @invoiceId, @taxRate;
+	END;
+	CLOSE cursorInvoiceDetail;
+	DEALLOCATE cursorInvoiceDetail;
+END;
+GO
 
 
 --data
@@ -230,15 +270,13 @@ INSERT INTO Dish (dishDescription, AmountWithTaxes, fkDishType) VALUES
 
 INSERT INTO Invoice (
 	invoiceNumber,
-	totalAmountWithTaxes,
-	totalAmountWithoutTaxes,
 	invoiceDate, 
 	fkWaiter,
 	fkTable
 ) VALUES
-	('A4', 10, 11, '2150-01-01', 1, 1),
-	('U2', 20, 23, '2150-01-30', 3, 2),
-	('C4', 30, 31, '2150-02-02', 2, 3),
-	('R2D2', 10, 12, '2150-12-12', 2, 1),
-	('C3PO', 15, 17.50, '2150-11-20', 1, 2)
+	('A4', '2150-01-01', 1, 1),
+	('U2', '2150-01-30', 3, 2),
+	('C4', '2150-02-02', 2, 3),
+	('R2D2', '2150-12-12', 2, 1),
+	('C3PO', '2150-11-20', 1, 2)
 ;
