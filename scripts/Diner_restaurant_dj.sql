@@ -146,8 +146,31 @@ CREATE TABLE Booking (
 );
 GO
 
--- triggers
-CREATE TRIGGER updateInvoiceAfterInsert
+
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+-- Views Creation
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+
+CREATE VIEW Reservations7ProchainsJours AS   
+SELECT firstname, dateBooking, fkTable, phonenumber
+FROM Booking
+WHERE dateBooking >= GETDATE() AND dateBooking < DATEADD(DAY, 7, GETDATE())
+GO  
+
+
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+-- Triggers Creation
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+
+/*
+	Update the Invoice amount (with and without taxes)
+	When an InvoiceDetail is inserted/updated/deleted
+*/
+CREATE TRIGGER updateInvoice
 ON InvoiceDetail
 AFTER INSERT, UPDATE, DELETE
 AS
@@ -191,7 +214,12 @@ END;
 GO
 
 
---data
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+-- Data Insertion
+-------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+
 insert into waiter(firstname, lastName) values ('Eva', 'Risselle');
 insert into waiter(firstname, lastName) values ('Marylou', 'Koume');
 insert into waiter(firstname, lastName) values ('Magali', 'Maçon');
@@ -279,4 +307,33 @@ INSERT INTO Invoice (
 	('C4', '2150-02-02', 2, 3),
 	('R2D2', '2150-12-12', 2, 1),
 	('C3PO', '2150-11-20', 1, 2)
+;
+
+
+
+INSERT INTO Booking (
+	dateBooking,
+	nbPers,
+	phonenumber,
+	lastname,
+	firstname,
+	fkTable
+)
+VALUES 
+(
+	DATEADD(DAY, 1, GETDATE()), 
+	1,
+	'0123456789',
+	'Lennon',
+	'Bob',
+	1
+),
+(
+	DATEADD(DAY, 1, GETDATE()), 
+	1,
+	'666',
+	'Death',
+	'Henry',
+	1
+)
 ;
