@@ -170,7 +170,7 @@ GO
 	Update the Invoice amount (with and without taxes)
 	When an InvoiceDetail is inserted/updated/deleted
 */
-CREATE TRIGGER updateInvoice
+CREATE TRIGGER updateInvoiceAmounts
 ON InvoiceDetail
 AFTER INSERT, UPDATE, DELETE
 AS
