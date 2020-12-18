@@ -1,4 +1,11 @@
-﻿CREATE PROCEDURE GenerateBookings
+﻿/*
+	Generate random Bookings :
+	* For the next 20 days
+	* At 12:00 and 19:00
+	* Without booking a table twice at the same time
+	* Booking a random number of tables for each time
+*/
+CREATE PROCEDURE GenerateBookings
 AS
 BEGIN
 	DECLARE @NOON TIME = '12:00:00';
@@ -14,6 +21,7 @@ BEGIN
 	BEGIN
 		-- day += 1
 		SET @day = DATEADD(DAY, 1, @day);
+
 		-- FOR time IN [NOON, EVENING]
 		DECLARE @time TIME = @NOON;
 		DECLARE @eveningGenerated BIT = @FALSE;
@@ -23,15 +31,17 @@ BEGIN
 
 			-- Get the random number of bookings to generate, with a maximum of one booking per table
 			DECLARE @TABLE_COUNT INT = (SELECT COUNT(*) FROM [Table]);
-			DECLARE @TABLES_QUANTITY_TO_GENERATE INT = RAND() * @TABLE_COUNT;
+			-- RAND * n : 0 to n-1
+			DECLARE @TABLES_QUANTITY_TO_GENERATE INT = RAND() * (@TABLE_COUNT + 1);
 			
 			-- Select the tables et random, and iterate amongst their ids
 			DECLARE tableCursor CURSOR LOCAL STATIC READ_ONLY FORWARD_ONLY
 			FOR 
 			SELECT TOP(@TABLES_QUANTITY_TO_GENERATE) idTable 
 			FROM [Table]
-			-- random value generated for each row
+			-- generate random order
 			ORDER BY NEWID();
+
 			DECLARE @tableId INT;
 			OPEN tableCursor;
 			FETCH NEXT FROM tableCursor INTO @tableId;
@@ -48,7 +58,6 @@ BEGIN
 			END
 			DEALLOCATE tableCursor;
 
-			-- TODO genrate data for that day and time
 			-- Update the loop variables
 			IF @time = @NOON
 				SET @time = @evening;
