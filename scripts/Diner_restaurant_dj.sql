@@ -8,7 +8,7 @@ SET NOCOUNT ON
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 
--- IF DB_ID (N'Diner_restaurant_DJ') IS NOT NULL
+IF DB_ID (N'Diner_restaurant_DJ') IS NOT NULL
 BEGIN
 	--Disconnect everyone except the admin
 	alter database Diner_restaurant_DJ set single_user with rollback immediate;
@@ -170,7 +170,7 @@ GO
 	Update the Invoice amount (with and without taxes)
 	When an InvoiceDetail is inserted/updated/deleted
 */
-CREATE TRIGGER updateInvoice
+CREATE TRIGGER updateInvoiceAmounts
 ON InvoiceDetail
 AFTER INSERT, UPDATE, DELETE
 AS
