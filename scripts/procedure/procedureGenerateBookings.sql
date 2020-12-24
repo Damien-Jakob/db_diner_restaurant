@@ -5,18 +5,31 @@
 	* Without booking a table twice at the same time
 	* Booking a random number of tables for each time
 */
+/*
+	Alternative solutioneasier 
+	* start cursor over tables
+	* and use random value to decide whether or not generate a booking for a specific moment
+*/
+USE Diner_restaurant_DJ
+GO
+
+DROP PROCEDURE IF EXISTS GenerateBookings;
+-- NO ; AFTER THE GO
+GO
+
 CREATE PROCEDURE GenerateBookings
 AS
 BEGIN
-	DECLARE @NOON TIME = '12:00:00';
-	DECLARE @EVENING TIME = '19:00:00';
-	DECLARE @FALSE BIT = 0;
-	DECLARE @TRUE BIT = 1;
+	DECLARE @NOON TIME = '12:00:00',
+			@EVENING TIME = '19:00:00';
+
+	-- make boolean assignation and comparison more readable
+	DECLARE @FALSE BIT = 0,
+			@TRUE BIT = 1;
 
 	-- FOR day FROM now + 1 TO now + 20
 	DECLARE @day DATE = GETDATE();
-	-- MAX_DAY = day + 20
-	DECLARE @MAX_DAY DATE = DATEADD(DAY, 20, @day);
+	DECLARE	@MAX_DAY DATE = DATEADD(DAY, 20, @day);
 	WHILE @day < @MAX_DAY
 	BEGIN
 		-- day += 1
@@ -37,24 +50,34 @@ BEGIN
 			-- Select the tables et random, and iterate amongst their ids
 			DECLARE tableCursor CURSOR LOCAL STATIC READ_ONLY FORWARD_ONLY
 			FOR 
-			SELECT TOP(@TABLES_QUANTITY_TO_GENERATE) idTable 
+			SELECT TOP(@TABLES_QUANTITY_TO_GENERATE) idTable, capacity
 			FROM [Table]
 			-- generate random order
 			ORDER BY NEWID();
 
 			DECLARE @tableId INT;
+			DECLARE @capacity INT;
 			OPEN tableCursor;
-			FETCH NEXT FROM tableCursor INTO @tableId;
+			FETCH NEXT FROM tableCursor INTO @tableId, @capacity;
 			WHILE @@FETCH_STATUS = 0
 			BEGIN
-				INSERT INTO Booking(dateBooking, nbPers, lastname, fkTable)
-				VALUES (
-					@datetime,
-					1 + Rand() * 4,
-					'testClient',
-					@tableId
-				);
-				FETCH NEXT FROM tableCursor INTO @tableId;
+				DECLARE @firstname VARCHAR(35),
+						@lastname VARCHAR(35);
+				-- get random name from previous customers
+				SELECT	@firstname = firstname, 
+						@lastname = lastname
+				FROM Booking 
+				ORDER BY NEWID();
+
+				BEGIN TRY
+					INSERT INTO Booking(dateBooking, nbPers, firstname, lastname, fkTable)
+					VALUES (@datetime, @capacity, @firstname, @lastname, @tableId);
+				END TRY
+				BEGIN CATCH
+					PRINT('Failed to generate a booking');
+				END CATCH
+
+				FETCH NEXT FROM tableCursor INTO @tableId, @capacity;
 			END
 			DEALLOCATE tableCursor;
 
