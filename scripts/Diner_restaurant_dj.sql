@@ -8,7 +8,7 @@ SET NOCOUNT ON
 -------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------
 
--- IF DB_ID (N'Diner_restaurant_DJ') IS NOT NULL
+IF DB_ID (N'Diner_restaurant_DJ') IS NOT NULL
 BEGIN
 	--Disconnect everyone except the admin
 	alter database Diner_restaurant_DJ set single_user with rollback immediate;
