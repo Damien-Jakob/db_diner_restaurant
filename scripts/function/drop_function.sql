@@ -1,0 +1,2 @@
+﻿drop function occupation
+go
