@@ -1,7 +1,5 @@
 ﻿select * from planificationLendemain
 
--- INSERT, DELETE, UPDATE : only if single table view
-
 insert into planificationLendemain(firstname, lastname, fktable, datework) 
 values ('Marylou', 'Koume', 6, '2018.12.07')
 
