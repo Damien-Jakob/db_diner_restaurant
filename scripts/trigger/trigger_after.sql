@@ -1,7 +1,8 @@
-﻿-- TriggerUpdateInvoice.sql:	This script updates the invoice table according to the amount entered in the invoice detail.
--- Version:		1.0, nov. 2020
--- Author:		F. Andolfatto
---
+﻿-- This script updates the invoice table according to the amount entered in the invoice detail.
+
+
+-- inserted
+-- deleted
 
 USE Diner_Restaurant_FAO
 
