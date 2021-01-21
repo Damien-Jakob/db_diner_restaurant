@@ -1,10 +1,4 @@
-Use Diner_Restaurant_FAO
-GO
-
-drop procedure GenerateBookings
-go
-
-create procedure GenerateBookings
+﻿create procedure GenerateBookings
 as
 begin
 
@@ -56,12 +50,4 @@ begin
 		Set @zeday = DATEADD(DAY,1,@zeday);
 		Set @nbdays = @nbdays + 1;
 	End
-
 end
-
-exec GenerateBookings
-
-delete from Booking
-
-
-select * from booking
