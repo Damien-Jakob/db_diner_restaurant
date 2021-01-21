@@ -1,0 +1,1 @@
+﻿Select Top 1 @madeByName = lastname, @madeByFirstName = firstname From [user] Order By NEWID();
