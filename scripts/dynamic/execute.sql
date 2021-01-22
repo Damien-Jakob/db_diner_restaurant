@@ -1,1 +1,1 @@
-﻿EXEC InsertDummyRecord 'MonTest';
+﻿EXEC InsertDummyRecord 'MonTest', 3;

@@ -3,9 +3,11 @@ GO
 
 CREATE PROCEDURE InsertDummyRecord
 @table NVARCHAR(MAX),
-@quantity INT = 10					-- default value
+@quantity INT = 1					-- default value
 AS
 BEGIN
+while(@quantity > 0)
+begin
 	declare 
 		@column NVARCHAR(MAX),
 		@type NVARCHAR(MAX),
@@ -57,4 +59,7 @@ BEGIN
 
 	-- execute request
 	EXEC sp_executesql @request;
+
+	set @quantity -= 1;
+end;
 END;
