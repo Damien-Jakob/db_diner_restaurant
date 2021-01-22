@@ -1,4 +1,4 @@
-﻿USE Diner_Restaurant_FAO
+﻿USE Diner_restaurant_DJ
 GO
 
 Create Table MonTest

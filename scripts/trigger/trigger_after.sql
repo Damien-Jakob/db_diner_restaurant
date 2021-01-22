@@ -35,7 +35,7 @@ begin
 
 		fetch c_insertinvoicedetail into @quantity, @amountwithtaxes, @invoiceid, @taxrate;
 	end
-	close c_insertinvoicedetail; 
+	close c_insertinvoicedetail;
 	deallocate c_insertinvoicedetail;
 
 	--we look for all the data that have been modified (old values) or added
