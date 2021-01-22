@@ -1,0 +1,1 @@
+﻿EXEC InsertDummyRecord N'MonTest';
