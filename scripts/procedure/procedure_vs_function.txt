@@ -1,0 +1,13 @@
+Procedure
+* (optional return value)
+* can have output params
+* cannot call function
+* can use TRY CATCH
+* can use transactions
+
+Function
+* must return value
+* Can call procedure
+* only SELECT
+* can be called in SELECT, WHERE, HAVING
+* tables returned can be treated as rowsets : used in JOIN
