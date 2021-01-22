@@ -33,13 +33,12 @@ begin
 		set @values += (case @type
 			when 'int' then cast(RAND()*100 AS nvarchar)							-- float will be converted auto to int in the insert
 			when 'float' then cast(RAND()*100 AS nvarchar)
-			when 'varchar' then '''' + CAST(NEWID() AS VARCHAR(MAX)) + ''''			-- '' : single quote
+			when 'varchar' then '''' + CAST(NEWID() AS VARCHAR(MAX)) + ''''			-- '' : single quote ¦ string too long will be automatically cut
 			when 'datetime' then '''' + convert(nvarchar, GETDATE(), 120) + ''''    -- style 120 : ODBC canonical -> convertable
 			else 'null'
 		end)
 		set @values += ','
 
-		-- TODO values
 		fetch cursor_columns into @column, @type;	
 	end
 	close cursor_columns; 
@@ -54,8 +53,6 @@ begin
 
 	-- insert request
 	set @request = 'insert into ' + @table + '(' + @columnsList + ') values (' + @values + ')'
-
-	-- print @request
 
 	-- execute request
 	EXEC sp_executesql @request;
