@@ -1,0 +1,6 @@
+﻿CREATE PROCEDURE CONVERTCELSIUSTOFAHRENHEIT
+@celsius real
+as
+select @celsius*1.8+32 as Fahrenheit
+
+exec CONVERTCELSIUSTOFAHRENHEIT 0 
